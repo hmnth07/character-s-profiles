@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Card from "./components/Card"
 
-function App() {
+export default function App() {
+
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+    async function getProfiles() {
+      const response = await fetch('https://rickandmortyapi.com/api/character');
+      const data = await response.json();
+      
+      console.log(data)
+      setItems(data.results)
+      
+    }
+    getProfiles()
+  }, [])
+
+  let cards = items.map(item => {
+    return (
+      <Card 
+        key={item.id}
+        item={item}
+      />
+    ) 
+  })
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>Character's profiles of the Rick and Morty sitcom</h1>
+      {cards}
     </div>
   );
 }
-
-export default App;
